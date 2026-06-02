@@ -4,7 +4,13 @@
             <flux:heading size="xl">Entregadores</flux:heading>
             <flux:text class="text-zinc-500">Cadastre seus entregadores e a capacidade de carga de cada um.</flux:text>
         </div>
-        <flux:button variant="primary" icon="plus" wire:click="openForm">
+        <flux:button
+            variant="primary"
+            icon="plus"
+            as="a"
+            :href="route('entregadores.create')"
+            wire:navigate
+        >
             Novo entregador
         </flux:button>
     </div>
@@ -40,7 +46,9 @@
                                     <flux:button
                                         size="sm"
                                         icon="pencil"
-                                        wire:click="openForm({{ $e->id }})"
+                                        as="a"
+                                        :href="route('entregadores.edit', $e)"
+                                        wire:navigate
                                         title="Editar"
                                     />
                                     <flux:button
@@ -58,46 +66,4 @@
             </flux:table>
         @endif
     </flux:card>
-
-    <flux:modal wire:model="showForm" class="md:w-[480px]">
-        <form wire:submit="save" class="space-y-4">
-            <flux:heading size="lg">{{ $editingId ? 'Editar entregador' : 'Novo entregador' }}</flux:heading>
-
-            <flux:input wire:model="nome" label="Nome" required autofocus />
-
-            <flux:input
-                wire:model="enderecoBase"
-                label="Endereço base (saída e retorno)"
-                description="Será geocodificado pelo OpenStreetMap"
-                required
-            />
-
-            <div class="grid grid-cols-2 gap-3">
-                <flux:input
-                    wire:model="pesoMaxKg"
-                    label="Peso máx. (kg)"
-                    type="number"
-                    step="0.1"
-                    min="0.1"
-                    required
-                />
-                <flux:input
-                    wire:model="volumeMaxLitros"
-                    label="Volume máx. (L)"
-                    type="number"
-                    step="0.1"
-                    min="0.1"
-                    required
-                />
-            </div>
-
-            <div class="flex justify-end gap-2 pt-2">
-                <flux:button variant="ghost" type="button" wire:click="closeForm">Cancelar</flux:button>
-                <flux:button variant="primary" type="submit">
-                    <span wire:loading.remove wire:target="save">Salvar</span>
-                    <span wire:loading wire:target="save">Salvando…</span>
-                </flux:button>
-            </div>
-        </form>
-    </flux:modal>
 </div>

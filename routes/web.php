@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Entregadores\Form as EntregadoresForm;
 use App\Livewire\Entregadores\Index as EntregadoresIndex;
 use App\Livewire\Entregas\Index as EntregasIndex;
 use App\Livewire\Roteirizar;
@@ -11,6 +12,8 @@ Route::redirect('/', '/dashboard')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::get('entregadores', EntregadoresIndex::class)->name('entregadores.index');
+    Route::get('entregadores/create', EntregadoresForm::class)->name('entregadores.create');
+    Route::get('entregadores/{entregador}/edit', EntregadoresForm::class)->name('entregadores.edit');
     Route::get('entregadores/{entregador}/roteirizar', Roteirizar::class)
         ->name('entregadores.roteirizar');
     Route::get('entregas', EntregasIndex::class)->name('entregas.index');

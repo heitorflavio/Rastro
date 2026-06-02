@@ -53,12 +53,12 @@
                 @endforeach
             </div>
 
-            <div class="flex items-center justify-between gap-3">
-                <flux:button size="sm" variant="ghost" icon="plus" wire:click.prevent="addAddress">
+            <div class="mt-5 flex flex-wrap items-center gap-3">
+                <flux:button size="sm" icon="plus" wire:click.prevent="addAddress" class="w-full sm:w-auto">
                     Adicionar parada
                 </flux:button>
 
-                <flux:button type="submit" variant="primary" icon="map">
+                <flux:button type="submit" variant="primary" icon="map" class="w-full sm:w-auto">
                     <span wire:loading.remove wire:target="optimize">Otimizar rota</span>
                     <span wire:loading wire:target="optimize">Otimizando…</span>
                 </flux:button>
@@ -273,11 +273,13 @@
             </flux:text>
             <div class="mb-3 flex flex-wrap items-center gap-4 text-xs text-zinc-600 dark:text-zinc-300">
                 <span class="inline-flex items-center gap-2">
-                    <span style="display:inline-block;width:24px;height:3px;background:#10b981;border-radius:9999px;"></span>
+                    <span
+                        style="display:inline-block;width:24px;height:3px;background:#10b981;border-radius:9999px;"></span>
                     Melhor distância (até a iteração)
                 </span>
                 <span class="inline-flex items-center gap-2">
-                    <span style="display:inline-block;width:24px;height:3px;background:#60a5fa;border-radius:9999px;"></span>
+                    <span
+                        style="display:inline-block;width:24px;height:3px;background:#60a5fa;border-radius:9999px;"></span>
                     Média da população de formigas
                 </span>
             </div>

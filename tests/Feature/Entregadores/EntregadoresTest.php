@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Entregadores\Form;
 use App\Livewire\Entregadores\Index;
 use App\Models\Entregador;
 use App\Models\User;
@@ -19,6 +20,15 @@ test('rota /entregadores responde 200 para usuário logado', function () {
     $this->get('/entregadores')->assertOk();
 });
 
+test('rota /entregadores/create responde 200 para usuário logado', function () {
+    $this->get('/entregadores/create')->assertOk();
+});
+
+test('rota de edição responde 200 para usuário logado', function () {
+    $e = Entregador::factory()->create();
+    $this->get(route('entregadores.edit', $e))->assertOk();
+});
+
 test('lista entregadores existentes', function () {
     Entregador::factory()->create(['nome' => 'João Motoboy']);
     Entregador::factory()->create(['nome' => 'Maria Van']);
@@ -35,14 +45,14 @@ test('cria entregador geocodificando o endereço base', function () {
         ]),
     ]);
 
-    Livewire::test(Index::class)
-        ->call('openForm')
+    Livewire::test(Form::class)
         ->set('nome', 'Carlos')
         ->set('enderecoBase', 'Praça Sete, BH')
         ->set('pesoMaxKg', 80)
         ->set('volumeMaxLitros', 150)
         ->call('save')
-        ->assertHasNoErrors();
+        ->assertHasNoErrors()
+        ->assertRedirect(route('entregadores.index'));
 
     $e = Entregador::first();
     expect($e->nome)->toBe('Carlos')
@@ -53,8 +63,7 @@ test('cria entregador geocodificando o endereço base', function () {
 });
 
 test('valida campos obrigatórios ao salvar', function () {
-    Livewire::test(Index::class)
-        ->call('openForm')
+    Livewire::test(Form::class)
         ->set('nome', '')
         ->set('enderecoBase', '')
         ->set('pesoMaxKg', 0)
@@ -68,8 +77,7 @@ test('mostra erro quando endereço não é encontrado', function () {
         'nominatim.openstreetmap.org/*' => Http::response([]),
     ]);
 
-    Livewire::test(Index::class)
-        ->call('openForm')
+    Livewire::test(Form::class)
         ->set('nome', 'Carlos')
         ->set('enderecoBase', 'endereço-impossível')
         ->set('pesoMaxKg', 80)
@@ -85,8 +93,7 @@ test('edita um entregador existente sem regeocodificar quando endereço não mud
 
     $e = Entregador::factory()->create(['nome' => 'Antigo', 'peso_max_kg' => 50]);
 
-    Livewire::test(Index::class)
-        ->call('openForm', $e->id)
+    Livewire::test(Form::class, ['entregador' => $e])
         ->set('nome', 'Novo Nome')
         ->call('save')
         ->assertHasNoErrors();
